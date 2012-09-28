@@ -3,7 +3,7 @@
 #
 # Author:   Radomirs Cirskis
 #
-# Created:  2012-02-26
+# Created:  2012-09-29
 # Licence:  WTFPL
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
@@ -24,12 +24,6 @@ import traceback
 
 # Configuration:
 from config import *
-
-
-def extract_all( name=None, attrs={}, **kwargs):
-    global soup
-    for el in soup.find_all( name,attrs=attrs, **kwargs):
-        el.extract()
 
 def get_contestants():
     """
