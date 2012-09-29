@@ -43,6 +43,7 @@ def process_source():
     the downloaded name of the file : FileName, ContestantName, Country, Language, Year, Round, Rank,
     ProblemName, Size(large/small), Time(hr), Time(min), Time(sec)
     """
+    print( "* Loading contestant meta data ..." )
     contestants = get_contestants()
     req = requests.get(SOURCE_URL)
     csv_output = open(OUTPUT_FILE,'wb')
