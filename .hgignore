@@ -10,7 +10,7 @@ mysql-connector-python*
 output*
 *.exe
 dist*
-build*
+build
 Setup.7z
 *.log
 raw
