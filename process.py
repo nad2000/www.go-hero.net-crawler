@@ -12,7 +12,7 @@ from __future__ import print_function
 import os, sys, re
 import requests, bs4
 from datetime import datetime
-import csv
+import csv, zipfile
 
 # Configuration:
 from config import *
@@ -113,12 +113,23 @@ def process_source():
                         os.makedirs(os.path.join(OUTPUT_DIR, dir_name))
                     # Prefix the file name with the problem name as it isn't unique:
                     full_file_name = os.path.join(OUTPUT_DIR, dir_name, file_name)
-                    print( "- Downloading '{}' into '{}'".format(file_name,full_file_name), file=sys.stderr )
-                    output = open( full_file_name, 'wb')
-                    output.write( src_file.content)
+                    if not os.path.exists(full_file_name):
+                        print( "- Downloading '{}' into '{}'".format(file_name,full_file_name), file=sys.stderr )
+                        output = open( full_file_name, 'wb')
+                        output.write( src_file.content)
+                        output.close()
+                    else:
+                        print( "- File '{}' already downloaded into '{}'".format(file_name,full_file_name), file=sys.stderr )
+                    # Unzip (assuming there is only one file per .zip file):
+                    zf = zipfile.ZipFile(full_file_name)
+                    source_file_name = zf.namelist()[0]
+                    new_source_file_name = os.path.splitext(full_file_name)[0] + os.path.splitext(source_file_name)[1]
+                    output = open( new_source_file_name,'wb')
+                    output.write( zf.read(source_file_name))
+                    zf.close()
                     output.close()
                     csv_writer.writerow([
-                        full_file_name,username,country,language,contest_year,
+                        new_source_file_name,username,country,language,contest_year,
                         round_title,rank,problem_name,size,
                         now.hour,now.minute,now.second])
     csv_output.close()
