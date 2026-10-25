@@ -1,0 +1,21 @@
+\documentclass{article}
+\usepackage{pst-func,a4wide}
+\parindent0pt
+\begingroup\catcode`\#=12\gdef\h{#}\endgroup
+\def\split#1#2{\global\edef\x{#1}\global\let\y#2}
+\def\got#1{\global\edef\line{\line#1}}
+\def\translate#1{\psforeach{\A}{ay,bn,cf,di,ec,fw,gl,hb,ik,ju,ko,lm,mx,ns,oe,pv,qz,rp,sd,tr,uj,vg,wt,xh,ya,zq}{\expandafter\split\A\ifx\y#1\got\x\fi}\ifx#1 \got{ }\relax\fi}
+\def\nextchar{\let\c= }
+\def\magic{\afterassignment\checkeol\nextchar}
+\def\checkeol{\ifx\c\eol\let\next\relax\else\translate\c\let\next\magic\fi\next}
+\def\process#1{\global\edef\line{Case \h\number\caseno: }\expandafter\magic#1\eol\line\immediate\write\outfile{\line}}
+\newread\infile\openin\infile=\jobname.in\newwrite\outfile\immediate\openout\outfile=\jobname.out\relax
+\newcount\caseno\caseno=0
+\endlinechar-1
+\begin{document}
+Greetings!\\I'm {\bf misof} and this is my solution to the Google CodeJam problem ``Speaking in Tongues''.\\
+Below you can see its report from solving the task.\\
+To use this \LaTeX\ ``program'' to solve the task, run: \verb!pdflatex -jobname A-small-attempt0 A.tex!\\
+Have fun!\par\bigskip\hrule\bigskip\tt\scriptsize
+\read\infile to\row\loop\read\infile to\row\unless\ifeof\infile\advance\caseno1\process{\row}\\\repeat\closeout\outfile
+\end{document}
